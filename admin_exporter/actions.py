@@ -21,8 +21,12 @@ def export(queryset, format):
 			flattednedItem["pk"] = item["pk"]
 			flattednedItem["model"] = item["model"]
 			dataFlattened.append(flattednedItem)
+
+		fields = ["pk" if field.name == "id" else field.name for field in queryset.model._meta.fields]
+		fields.append('model')
+
 		data = json.dumps(dataFlattened)
-		data = json_to_csv(data)
+		data = json_to_csv(data, fields)
 	else:
 		data = serialize_queryset(queryset, format)
 
